@@ -77,6 +77,12 @@ void get_dtime() {
 
 int set(int tar, int val) {
   int i;
+  if(val<0){
+    val=0;  
+  }
+  else if(val>180){
+    val=180;  
+  }
   for (i = 0; i < 14; i++) {
     if (order[i] == tar) {
       posi[i] = val;

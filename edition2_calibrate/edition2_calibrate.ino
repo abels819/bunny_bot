@@ -2,7 +2,7 @@
 #include "movements.h"
 #include <SoftwareSerial.h>
 
-SoftwareSerial lzserial(13,17);
+SoftwareSerial lzserial(13, 17);
 
 #define L_EYE=A4;
 #define R_EYE=A5;
@@ -44,48 +44,200 @@ void check_high() {
 }
 
 void walk_forward() {
+  int LTv = 0;
+  int RTv = 0;
+  int LFv = 70;
+  int RFv = 70;
+  int LNv = 80;
+  int RNv = 70;
+  int LSv=65;
+  int RSv=65;
+  int LAv=5;
+  int RAv=90;
+  set(LN, 80);
+  set(RN, 70);
+  set(LA,5);
+  give_pwm(5);
+  for (int i = 0; i < 25; i++) {
+    LTv += 2;
+    RTv += 2;
+    LFv -= 2;
+    RFv -= 2;
+    RSv+=2;
+    LSv-=1;
+    LAv+=1;
+    RAv-=2;
+    set(LT, LTv);
+    set(RT, RTv);
+    set(LF, LFv);
+    set(RF, RFv);
+    set(LS, LSv);
+    set(RS, RSv);
+    set(LA, LAv);
+    set(RA, RAv);
+    give_pwm(1);
+  }
+  set(RA,20);
+  give_pwm(5);
+  for (int i = 0; i < 25; i++) {
+    LTv += 2;
+    RTv += 2;
+    LNv+=3;
+    RNv+=2;
+    LSv+=1;
+    RSv-=1;
+    RAv-=4;
+    set(LT, LTv);
+    set(RT, RTv);
+    set(LN, LNv);
+    set(RN, LNv);
+    set(LS, LSv);
+    set(RS, RSv);
+    set(LA, LAv);
+    set(RA, RAv);
+    give_pwm(1);
+  }
+  set(LT, 90);
+  set(RT, 90);
+  set(LF, 12);
+  set(RF, 10);
+  set(LS, 50);
+  set(RS, 50);
+  set(LA, 50);
+  set(RA, 90);
+  give_pwm(3);
+  set(LS, 50);
+  set(RS, 50);
+  set(LN, 180);
+  set(RN, 180);
+  give_pwm(2);
+  set(LS, 50);
+  set(RS, 50);
+  set(LN, 0);
+  set(RN, 0);
+  set(LF, 0);
+  set(RF, 0);
+  give_pwm(3);
+  reset();
+  set(LF, 0);
+  set(RF, 0);
+  give_pwm(5);
+  reset();
+  give_pwm(5);
 }
 
-void walk_left() {
+void move_right() {
+  set(LS,90);
+  set(LA,30);
+
+  set(RS,90);
+  set(RA,30);
+  
+  set(LT,15);
+  set(RT,15);
+  set(LF,80);
+  set(RF,80);
+  give_pwm(4);
+  
+  set(SPINE,110);
+  set(LS,30);
+  set(RS,30);
+  
+  set(LT,90);
+  set(LN,30);
+  set(LF,0);
+
+  set(RT,10);
+  set(RN,80);
+  
+  give_pwm(10);
+  reset();
+  give_pwm(20);
 }
 
-void walk_right() {
+void move_left() {
+  set(LS,90);
+  set(LA,30);
+
+  set(RS,90);
+  set(RA,30);
+  
+  set(LT,15);
+  set(RT,15);
+  set(LF,80);
+  set(RF,80);
+  give_pwm(4);
+  
+  set(SPINE,50);
+  set(LS,30);
+  set(RS,30);
+  
+  set(RT,90);
+  set(RN,30);
+  set(RF,0);
+
+  set(LT,10);
+  set(LN,80);
+  
+  give_pwm(10);
+  reset();
+  give_pwm(20);
+  delay(1000);
+}
+
+void random_walk(){
+  randomSeed(analogRead(A1));
+  int looptimes=random(3)+1;
+    for(int i=0;i<looptimes;i++){
+      int todo=random(3);
+      int delaytime=random(500)+200;
+      if(todo==0){
+        walk_forward();  
+      }  
+      if(todo==1){
+        move_left();  
+      }
+      if(todo==2){
+        move_right();  
+      }
+      delay(delaytime);
+    }
 }
 
 void run_forward() {
-  set(LT,30);
-  set(RT,30);
-  set(LF,50);
-  set(RF,50);
-  set(LN,100);
-  set(RN,90);
-  set(LS,20);
-  set(RS,20);
-  set(LA,20);
-  set(RA,40);
+  set(LT, 30);
+  set(RT, 30);
+  set(LF, 50);
+  set(RF, 50);
+  set(LN, 100);
+  set(RN, 90);
+  set(LS, 20);
+  set(RS, 20);
+  set(LA, 20);
+  set(RA, 40);
   give_pwm(10);
   delay(5);
-  set(LT,90);
-  set(RT,90);
-  set(LF,12);
-  set(RF,10);
-  set(LS,50);
-  set(RS,50);
-  set(LA,50);
-  set(RA,90);
+  set(LT, 90);
+  set(RT, 90);
+  set(LF, 12);
+  set(RF, 10);
+  set(LS, 50);
+  set(RS, 50);
+  set(LA, 50);
+  set(RA, 90);
   give_pwm(10);
   delay(5);
   reset();
-  set(LS,50);
-  set(RS,50);
-  set(LN,0);
-  set(RN,0);
-  set(LF,0);
-  set(RF,0);
+  set(LS, 50);
+  set(RS, 50);
+  set(LN, 0);
+  set(RN, 0);
+  set(LF, 0);
+  set(RF, 0);
   give_pwm(4);
   reset();
-  set(LS,50);
-  set(RS,50);
+  set(LS, 50);
+  set(RS, 50);
   give_pwm(8);
   reset();
   give_pwm(3);
@@ -131,20 +283,21 @@ void setup() {
   lzserial.begin(9600);
   sort();
   get_dtime();
-  set(LS,65);
-  set(RS,65);
-  set(LT,0);
-  set(RT,0);
-  set(N1,120);
-  set(N2,40);
-  set(LN,70);
-  set(RN,60);
-  set(LF,70);
-  set(RF,70);
+  set(SPINE,80);
+  set(LS, 65);
+  set(RS, 65);
+  set(LT, 0);
+  set(RT, 0);
+  set(N1, 120);
+  set(N2, 40);
+  set(LN, 70);
+  set(RN, 60);
+  set(LF, 70);
+  set(RF, 70);
 
   change_reset();
-  while(!Serial){
-    }
+  while (!Serial) {
+  }
 }
 
 float check_distance() {
@@ -162,19 +315,19 @@ float check_distance() {
 
 void do_normal() {
   Serial.println("doing normal");
-  int todo=random(1);
+  int todo = random(1);
 }
 void do_happy() {
   Serial.println("doing happy");
-  int todo=random(1);
+  int todo = random(1);
 }
 void do_relaxed() {
   Serial.println("doing relaxed");
-  int todo=random(1);
+  int todo = random(1);
 }
 void do_scared() {
   Serial.println("doing scared");
-  int todo=random(1);
+  int todo = random(1);
 }
 
 
@@ -280,5 +433,5 @@ void primary() {
 }
 
 void loop() {
-    run_forward();
+  random_walk();
 }
