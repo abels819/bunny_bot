@@ -77,12 +77,6 @@ void get_dtime() {
 
 int set(int tar, int val) {
   int i;
-  if(val<0){
-    val=0;  
-  }
-  else if(val>180){
-    val=180;  
-  }
   for (i = 0; i < 14; i++) {
     if (order[i] == tar) {
       posi[i] = val;
@@ -132,12 +126,6 @@ void give_pwm(int looptimes) {
   //print_pwm_list();
   for (int i = 0; i < looptimes; i++) {
     pwm_once();
-    if (mood == 1) {
-      //situation_now = situation();
-      //if (situation() != 0) {
-      //  break;
-      //}
-    }
   }
 }
 

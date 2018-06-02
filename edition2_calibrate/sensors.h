@@ -30,19 +30,19 @@ float check_distance(){
 
 
 float left_noise() {  //checked
-  return analogRead(A4);
-}
-
-float right_IR() {
-  return analogRead(A5);
-}
-
-float right_noise() {  //checked
   return analogRead(A6);
 }
 
-float left_IR() {  //checked
+float right_IR() {
   return analogRead(A7);
+}
+
+float right_noise() {  //checked
+  return analogRead(A5);
+}
+
+float left_IR() {  //checked
+  return analogRead(A4);
 }
 
 
@@ -55,10 +55,10 @@ int situation() {
     return 9;
   }
   else {
-    if (l_noise - r_noise > 40) {
+    if (l_noise - r_noise > 50) {
       return 8;
     }
-    else if (r_noise - l_noise > 40) {
+    else if (r_noise - l_noise > 50) {
       return 7;
     }
     else {

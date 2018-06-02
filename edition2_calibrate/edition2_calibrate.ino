@@ -13,7 +13,7 @@ int H = 9 , N1 = 10, N2 = 11, SPINE = 12, LS = 8, LA = 6, LT = 16, LN = 5, LF = 
 int head_position = 2;
 int mood_count = 0;
 int lost_human = 0;
-int mood_limit = 10;
+int mood_limit = 20;
 
 
 
@@ -89,13 +89,61 @@ void random_head_check(int looptimes) {
       check_high();
     }
     give_pwm(delaytime);
+    if(mood==1&&situation()!=0){
+     return; 
+    }
   }
 }
+void push() {
+  check_high();
+  set(LN, 100);
+  set(RN, 110);
+  set(LF, 120);
+  set(RF, 120);
+  give_pwm(3);
+  set(LT, 30);
+  set(RT, 30);
+  set(LF, 50);
+  set(RF, 50);
+  give_pwm(4);
+  for (int i = 0; i < 6; i++) {
+
+    set(LA, 30);
+    set(RA, 30);
+    set(LS, 110);
+    set(RS, 110);
+    set(LN, 30);
+    set(RN, 30);
+    give_pwm(1);
+    delay(10);
+  }
+  set(LS, 0);
+  set(RS, 0);
+  set(LA, 40);
+  set(RA, 60);
+  give_pwm(15);
+  set(LA, 30);
+  set(RA, 30);
+  set(LS, 110);
+  set(RS, 110);
+  give_pwm(10);
+  reset();
+  give_pwm(5);
+}
+
+
 
 void walk_forward() {
   check_low();
   if (check_distance() <= 80) {
-    return;
+    int todo = random(2);
+    if (todo == 0) {
+      push();
+      return;
+    }
+    else {
+      return;
+    }
   }
   int LTv = 0;
   int RTv = 0;
@@ -182,7 +230,14 @@ void walk_forward() {
 void move_right() {
   head_check_right();
   if (check_distance() <= 80) {
-    return;
+    int todo = random(2);
+    if (todo == 0) {
+      push();
+      return;
+    }
+    else {
+      return;
+    }
   }
   set(LS, 90);
   set(LA, 30);
@@ -217,7 +272,14 @@ void move_right() {
 void move_left() {
   head_check_left();
   if (check_distance() <= 80) {
-    return;
+    int todo = random(2);
+    if (todo == 0) {
+      push();
+      return;
+    }
+    else {
+      return;
+    }
   }
   set(LS, 90);
   set(LA, 30);
@@ -265,6 +327,9 @@ void random_walk() {
     if (todo == 2) {
       move_right();
     }
+    if(mood==1&&situation()!=0){
+     return; 
+    }
     delay(delaytime);
   }
 }
@@ -272,7 +337,14 @@ void random_walk() {
 void run_forward() {
   check_low();
   if (check_distance() <= 80) {
-    return;
+    int todo = random(2);
+    if (todo == 0) {
+      push();
+      return;
+    }
+    else {
+      return;
+    }
   }
   set(LT, 30);
   set(RT, 30);
@@ -313,7 +385,14 @@ void run_forward() {
 void run_left() {
   head_check_left();
   if (check_distance() <= 80) {
-    return;
+    int todo = random(2);
+    if (todo == 0) {
+      push();
+      return;
+    }
+    else {
+      return;
+    }
   }
   set(LS, 90);
   set(LA, 30);
@@ -390,6 +469,9 @@ void random_run() {
     if (todo == 2) {
       run_right();
     }
+    if(mood==1&&situation()!=0){
+     return; 
+    }
     delay(delaytime);
   }
 }
@@ -399,8 +481,8 @@ void roll() {
 
 void stand() {
   int looptimes = random(2) + 1;
-  set(LN, 120);
-  set(RN, 120);
+  set(LN, 110);
+  set(RN, 110);
   set(LF, 120);
   set(RF, 120);
   give_pwm(3);
@@ -471,12 +553,72 @@ void poof() {
   give_pwm(10);
 }
 void jump() {
+  
+  head_return();
+  int looptimes = random(10) + 5;
+  set(LN, 110);
+  set(RN, 110);
+  set(LF, 120);
+  set(RF, 120);
+  give_pwm(3);
+  set(LT, 35);
+  set(RT, 35);
+  set(LF, 50);
+  set(RF, 50);
+  give_pwm(4);
+  for (int i = 0; i < 6; i++) {
+    set(LN, 30);
+    set(RN, 30);
+    give_pwm(1);
+    delay(10);
+  }
+  reset();
+  give_pwm(5);
 }
 
 void rob_face() {
-}
+  head_return();
+  int looptimes = random(10) + 5;
+  set(LN, 110);
+  set(RN, 110);
+  set(LF, 120);
+  set(RF, 120);
+  give_pwm(3);
+  set(LT, 35);
+  set(RT, 35);
+  set(LF, 50);
+  set(RF, 50);
+  give_pwm(4);
+  for (int i = 0; i < 6; i++) {
+    set(LN, 30);
+    set(RN, 30);
+    give_pwm(1);
+    delay(10);
+  }
+  int LSv = 20;
+  int RSv = 20;
+  int LAv = -40;
+  int RAv = 10;
+  int N1v = 150;
+  int N2v = 35;
+  for (int i = 0; i < looptimes; i++) {
+    set(LS, LSv + random(25) - 12);
+    set(RS, RSv + random(25) - 12);
+    set(LA, LAv + random(25) - 12);
+    set(RA, RAv + random(25) - 12);
+    set(N1, N1v + random(19) - 9);
+    set(N2, N2v + random(19) - 9);
+    for (int i = 0; i < 5; i++) {
 
-void push() {
+      give_pwm(1);
+      delay(10);
+    }
+    if(mood==1&&situation()!=0){
+     return; 
+    }
+  }
+  reset();
+  give_pwm(10);
 }
 
 void fall() {
@@ -494,6 +636,7 @@ void setup() {
   lzserial.begin(9600);
   sort();
   get_dtime();
+  set(H,93);
   set(SPINE, 80);
   set(LS, 65);
   set(RS, 65);
@@ -510,26 +653,61 @@ void setup() {
   while (Serial.available()) {
     Serial.read();
   }
+
+  give_pwm(10);
 }
 
 
 
 
 void do_normal() {
-  Serial.println("doing normal");
-  int todo = random(1);
+randomSeed(analogRead(A0));
+  int todo = random(19);
+  if (todo == 0 || todo == 6 ||todo==10 ||todo==11) {
+    random_run();
+  }
+  if (todo == 1 || todo == 8 ||todo==12 ||todo==13 ||todo==17 ||todo==18) {
+    int looptimes=random(3)+1;
+    random_head_check(looptimes);
+  }
+  if (todo == 2 || todo == 7 ||todo==14 ||todo==15) {
+    random_walk();
+  }
+  if (todo == 3) {
+    prone();
+  }
+  if (todo == 4) {
+    poof();
+  }
+  if (todo == 5) {
+    stand();
+  }
+  if(todo==9){
+    rob_face();
+  }
+  if(todo==16){
+    jump();  
+  }
 }
 void do_happy() {
   Serial.println("doing happy");
   int todo = random(1);
+  int situation_now=situation();
+  if(situation_now==4){
+    run_forward();  
+  }
+  if(situation_now==5){
+    run_right();  
+  }
+  if(situation_now==6){
+    run_left();  
+  }
 }
 void do_relaxed() {
-  Serial.println("doing relaxed");
-  int todo = random(1);
+  do_normal();
 }
 void do_scared() {
-  Serial.println("doing scared");
-  int todo = random(1);
+  random_run();
 }
 
 
@@ -636,14 +814,14 @@ void primary() {
 
 void test_loop() {
   randomSeed(analogRead(A0));
-  int todo = random(9);
-  if (todo == 0 || todo == 6) {
+  int todo = random(16);
+  if (todo == 0 || todo == 6 ||todo==10 ||todo==11) {
     random_run();
   }
-  if (todo == 1 || todo == 8) {
+  if (todo == 1 || todo == 8 ||todo==12 ||todo==13) {
     random_head_check(1);
   }
-  if (todo == 2 || todo == 7) {
+  if (todo == 2 || todo == 7 ||todo==14 ||todo==15) {
     random_walk();
   }
   if (todo == 3) {
@@ -655,8 +833,11 @@ void test_loop() {
   if (todo == 5) {
     stand();
   }
+  if(todo==9){
+    rob_face();
+  }
 }
 
 void loop() {
-  test_loop();
+  primary();
 }
