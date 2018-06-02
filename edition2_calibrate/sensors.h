@@ -1,4 +1,33 @@
 
+byte bytes[2];
+unsigned char re_buf[2];
+int counter = 0;
+
+float check_distance_single() {
+
+  Serial.write(0XA0);
+  delay(10);
+  while (Serial.available()) {
+    bytes[counter] = Serial.read();
+    re_buf[counter] = bytes[counter];
+    counter++;
+  }
+  counter = 0;
+  uint16_t distance = re_buf[0] << 8 | re_buf[1];
+  Serial.println(distance);
+  return distance;
+}
+
+float check_distance(){
+  float distance;
+  for(int i=0;i<3;i++){
+      distance=check_distance_single();
+      delay(20);
+  }  
+
+  return distance;
+}
+
 
 float left_noise() {  //checked
   return analogRead(A4);

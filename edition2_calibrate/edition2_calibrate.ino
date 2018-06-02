@@ -15,109 +15,111 @@ int mood_count = 0;
 int lost_human = 0;
 int mood_limit = 10;
 
-unsigned char bytes[2];
-int counter = 0;
+
 
 
 
 
 //motions..............................................................................................................
 void head_check_left() {
-  set(H,30);
+  set(H, 30);
   give_pwm(5);
 }
 
 void head_check_right() {
-  set(H,150);
+  set(H, 150);
   give_pwm(5);
 }
 
 void check_half_left() {
-  set(H,60);
+  set(H, 60);
   give_pwm(5);
 }
 
 void check_half_right() {
-  set(H,120);
+  set(H, 120);
   give_pwm(5);
 }
 
 void head_return() {
-  set(H,90);
-  set(N1,120);
-  set(N2,40);
+  set(H, 90);
+  set(N1, 120);
+  set(N2, 40);
   give_pwm(5);
 }
 
 void check_low() {
-  set(N1,90);
-  set(N2,90);
+  set(N1, 90);
+  set(N2, 90);
   give_pwm(5);
 }
 
 void check_high() {
-  set(N1,135);
-  set(N2,40);
+  set(N1, 135);
+  set(N2, 40);
   give_pwm(5);
 }
 
-void random_head_check(int looptimes){
-    
+void random_head_check(int looptimes) {
+
   randomSeed(analogRead(A1));
-  looptimes=looptimes*(random(3)+1);
-    for(int i=0;i<looptimes;i++){
-      int todo=random(7);
-      int delaytime=random(1000)+200;
-      if(todo==0){
-        head_return();  
-      }  
-      if(todo==1){
-        head_check_left();  
-      }
-      if(todo==2){
-        head_check_right();  
-      }
-      if(todo==3){
-        check_half_left();
-      }
-      if(todo==4){
-        check_half_right();  
-      }
-      if(todo==5){
-        check_low();  
-      }
-      if(todo==6){
-        check_high();  
-      }
-      delay(delaytime);
+  looptimes = looptimes * (random(3) + 1);
+  for (int i = 0; i < looptimes; i++) {
+    int todo = random(7);
+    int delaytime = random(50) + 10;
+    if (todo == 0) {
+      head_return();
     }
+    if (todo == 1) {
+      head_check_left();
+    }
+    if (todo == 2) {
+      head_check_right();
+    }
+    if (todo == 3) {
+      check_half_left();
+    }
+    if (todo == 4) {
+      check_half_right();
+    }
+    if (todo == 5) {
+      check_low();
+    }
+    if (todo == 6) {
+      check_high();
+    }
+    give_pwm(delaytime);
+  }
 }
 
 void walk_forward() {
   check_low();
+  if (check_distance() <= 80) {
+    return;
+  }
   int LTv = 0;
   int RTv = 0;
   int LFv = 70;
   int RFv = 70;
   int LNv = 80;
   int RNv = 70;
-  int LSv=65;
-  int RSv=65;
-  int LAv=5;
-  int RAv=90;
+  int LSv = 65;
+  int RSv = 65;
+  int LAv = 5;
+  int RAv = 90;
   set(LN, 80);
   set(RN, 70);
-  set(LA,5);
+  set(LA, 5);
   give_pwm(5);
   for (int i = 0; i < 12; i++) {
     LTv += 4;
     RTv += 4;
     LFv -= 4;
     RFv -= 4;
-    RSv+=4;
-    LSv-=2;
-    LAv+=2;
-    RAv-=4;
+    RSv += 4;
+    LSv -= 2;
+    LAv += 2;
+    RAv -= 4;
     set(LT, LTv);
     set(RT, RTv);
     set(LF, LFv);
@@ -128,16 +130,16 @@ void walk_forward() {
     set(RA, RAv);
     give_pwm(1);
   }
-  set(RA,20);
+  set(RA, 20);
   give_pwm(5);
   for (int i = 0; i < 12; i++) {
     LTv += 4;
     RTv += 4;
-    LNv+=6;
-    RNv+=4;
-    LSv+=2;
-    RSv-=2;
-    RAv-=8;
+    LNv += 6;
+    RNv += 4;
+    LSv += 2;
+    RSv -= 2;
+    RAv -= 8;
     set(LT, LTv);
     set(RT, RTv);
     set(LN, LNv);
@@ -179,90 +181,99 @@ void walk_forward() {
 
 void move_right() {
   head_check_right();
-  set(LS,90);
-  set(LA,30);
+  if (check_distance() <= 80) {
+    return;
+  }
+  set(LS, 90);
+  set(LA, 30);
 
-  set(RS,90);
-  set(RA,30);
-  
-  set(LT,15);
-  set(RT,15);
-  set(LF,80);
-  set(RF,80);
+  set(RS, 90);
+  set(RA, 30);
+
+  set(LT, 15);
+  set(RT, 15);
+  set(LF, 80);
+  set(RF, 80);
   give_pwm(4);
-  
-  for(int i=0;i<10;i++){
-    set(SPINE,110);
-  set(LS,30);
-  set(RS,30);
-  
-  set(LT,90);
-  set(LN,30);
-  set(LF,0);
 
-  set(RT,10);
-  set(RN,80);
-  give_pwm(1);
-  delay(20);
-    }
+  for (int i = 0; i < 10; i++) {
+    set(SPINE, 110);
+    set(LS, 30);
+    set(RS, 30);
+
+    set(LT, 90);
+    set(LN, 30);
+    set(LF, 0);
+
+    set(RT, 10);
+    set(RN, 80);
+    give_pwm(1);
+    delay(20);
+  }
   reset();
   give_pwm(20);
 }
 
 void move_left() {
   head_check_left();
-  set(LS,90);
-  set(LA,30);
+  if (check_distance() <= 80) {
+    return;
+  }
+  set(LS, 90);
+  set(LA, 30);
 
-  set(RS,90);
-  set(RA,30);
-  
-  set(LT,15);
-  set(RT,15);
-  set(LF,80);
-  set(RF,80);
+  set(RS, 90);
+  set(RA, 30);
+
+  set(LT, 15);
+  set(RT, 15);
+  set(LF, 80);
+  set(RF, 80);
   give_pwm(4);
-  
-  for(int i=0;i<10;i++){
-  set(SPINE,50);
-  set(LS,30);
-  set(RS,30);
-  
-  set(RT,90);
-  set(RN,30);
-  set(RF,0);
 
-  set(LT,10);
-  set(LN,80);
-  give_pwm(1);  
-  delay(20);
+  for (int i = 0; i < 10; i++) {
+    set(SPINE, 50);
+    set(LS, 30);
+    set(RS, 30);
+
+    set(RT, 90);
+    set(RN, 30);
+    set(RF, 0);
+
+    set(LT, 10);
+    set(LN, 80);
+    give_pwm(1);
+    delay(20);
   }
   reset();
   give_pwm(20);
   delay(1000);
 }
 
-void random_walk(){
+void random_walk() {
   randomSeed(analogRead(A1));
-  int looptimes=random(3)+1;
-    for(int i=0;i<looptimes;i++){
-      int todo=random(3);
-      int delaytime=random(500)+200;
-      if(todo==0){
-        walk_forward();  
-      }  
-      if(todo==1){
-        move_left();  
-      }
-      if(todo==2){
-        move_right();  
-      }
-      delay(delaytime);
+  int looptimes = random(3) + 1;
+  for (int i = 0; i < looptimes; i++) {
+    int todo = random(3);
+    int delaytime = random(500) + 200;
+    if (todo == 0) {
+      walk_forward();
     }
+    if (todo == 1) {
+      move_left();
+    }
+    if (todo == 2) {
+      move_right();
+    }
+    delay(delaytime);
+  }
 }
 
 void run_forward() {
   check_low();
+  if (check_distance() <= 80) {
+    return;
+  }
   set(LT, 30);
   set(RT, 30);
   set(LF, 50);
@@ -286,8 +297,8 @@ void run_forward() {
   reset();
   set(LS, 50);
   set(RS, 50);
-  set(LN,25);
-  set(RN,25);
+  set(LN, 25);
+  set(RN, 25);
   set(LF, 0);
   set(RF, 0);
   give_pwm(4);
@@ -301,28 +312,31 @@ void run_forward() {
 
 void run_left() {
   head_check_left();
-  set(LS,90);
-  set(LA,30);
+  if (check_distance() <= 80) {
+    return;
+  }
+  set(LS, 90);
+  set(LA, 30);
 
-  set(RS,90);
-  set(RA,30);
-  
-  set(LT,15);
-  set(RT,15);
-  set(LF,80);
-  set(RF,80);
+  set(RS, 90);
+  set(RA, 30);
+
+  set(LT, 15);
+  set(RT, 15);
+  set(LF, 80);
+  set(RF, 80);
   give_pwm(4);
-  
-  set(SPINE,50);
-  set(LS,30);
-  set(RS,30);
-  
-  set(RT,90);
-  set(RN,30);
-  set(RF,0);
 
-  set(LT,10);
-  set(LN,80);
+  set(SPINE, 50);
+  set(LS, 30);
+  set(RS, 30);
+
+  set(RT, 90);
+  set(RN, 30);
+  set(RF, 0);
+
+  set(LT, 10);
+  set(LN, 80);
   give_pwm(10);
   reset();
   give_pwm(20);
@@ -331,83 +345,130 @@ void run_left() {
 
 void run_right() {
   head_check_right();
-  set(LS,90);
-  set(LA,30);
+  if (check_distance() <= 80) {
+    return;
+  }
+  set(LS, 90);
+  set(LA, 30);
 
-  set(RS,90);
-  set(RA,30);
-  
-  set(LT,15);
-  set(RT,15);
-  set(LF,80);
-  set(RF,80);
+  set(RS, 90);
+  set(RA, 30);
+
+  set(LT, 15);
+  set(RT, 15);
+  set(LF, 80);
+  set(RF, 80);
   give_pwm(4);
-  
-    set(SPINE,110);
-  set(LS,30);
-  set(RS,30);
-  
-  set(LT,90);
-  set(LN,30);
-  set(LF,0);
 
-  set(RT,10);
-  set(RN,80);
+  set(SPINE, 110);
+  set(LS, 30);
+  set(RS, 30);
+
+  set(LT, 90);
+  set(LN, 30);
+  set(LF, 0);
+
+  set(RT, 10);
+  set(RN, 80);
   give_pwm(10);
   reset();
   give_pwm(20);
 }
 
-void random_run(){
+void random_run() {
   randomSeed(analogRead(A1));
-  int looptimes=random(3)+1;
-    for(int i=0;i<looptimes;i++){
-      int todo=random(3);
-      int delaytime=random(200)+200;
-      if(todo==0){
-        run_forward();  
-      }  
-      if(todo==1){
-        run_left();  
-      }
-      if(todo==2){
-        run_right();  
-      }
-      delay(delaytime);
+  int looptimes = random(3) + 1;
+  for (int i = 0; i < looptimes; i++) {
+    int todo = random(3);
+    int delaytime = random(200) + 200;
+    if (todo == 0) {
+      run_forward();
     }
+    if (todo == 1) {
+      run_left();
+    }
+    if (todo == 2) {
+      run_right();
+    }
+    delay(delaytime);
+  }
 }
 
 void roll() {
 }
 
 void stand() {
+  int looptimes = random(2) + 1;
+  set(LN, 120);
+  set(RN, 120);
+  set(LF, 120);
+  set(RF, 120);
+  give_pwm(3);
+  set(LT, 30);
+  set(RT, 30);
+  set(LF, 50);
+  set(RF, 50);
+  give_pwm(4);
+  for (int i = 0; i < 6; i++) {
+
+    set(LS, 110);
+    set(RS, 110);
+    set(LN, 30);
+    set(RN, 30);
+    give_pwm(1);
+    delay(10);
+  }
+  random_head_check(looptimes);
+  reset();
+  give_pwm(5);
 }
 
 void prone() {
   check_low();
-  for(int i=0;i<8;i++){
-      set(LT,80);
-      set(RT,80);
-      set(LN,20);
-      set(RN,20);
-      set(LF,0);
-      set(RF,0);
-      set(LS,130);
-      set(RS,130);
-      set(LA,0);
-      set(RA,0);
-      give_pwm(1);
-      delay(30);
+  for (int i = 0; i < 8; i++) {
+    set(LT, 80);
+    set(RT, 80);
+    set(LN, 20);
+    set(RN, 20);
+    set(LF, 0);
+    set(RF, 0);
+    set(LS, 130);
+    set(RS, 130);
+    set(LA, 0);
+    set(RA, 0);
+    give_pwm(1);
+    delay(30);
   }
-  int looptimes=random(2)+1;
+  int looptimes = random(2) + 1;
   random_head_check(looptimes);
   reset();
   give_pwm(6);
   delay(500);
 }
 
-void poof(){
-  
+void poof() {
+  int looptimes = random(5) + 1;
+  set(LS, 120);
+  set(LA, 0);
+  set(RS, 50);
+  set(RA, 50);
+  set(LF, 0);
+  set(RF, 0);
+  set(LN, 40);
+  set(RN, 40);
+  set(LT, 10);
+  set(RT, 10);
+  give_pwm(10);
+
+
+  set(LS, 30);
+  set(RS, 60);
+  set(LA, 0);
+  set(RA, 0);
+  give_pwm(10);
+  random_head_check(looptimes);
+  reset();
+  give_pwm(10);
 }
 void jump() {
 }
@@ -433,7 +494,7 @@ void setup() {
   lzserial.begin(9600);
   sort();
   get_dtime();
-  set(SPINE,80);
+  set(SPINE, 80);
   set(LS, 65);
   set(RS, 65);
   set(LT, 0);
@@ -446,21 +507,12 @@ void setup() {
   set(RF, 70);
 
   change_reset();
-  while (!Serial) {
+  while (Serial.available()) {
+    Serial.read();
   }
 }
 
-float check_distance() {
-  Serial.write(0XA0);
-  delay(10);
-  while (Serial.available()) {
-    bytes[counter] = Serial.read();
-    //Serial.println(bytes[counter]);
-    counter++;
-  }
-  counter = 0;
-  return (bytes[0] << 8)&bytes[1];
-}
+
 
 
 void do_normal() {
@@ -584,21 +636,27 @@ void primary() {
 
 void test_loop() {
   randomSeed(analogRead(A0));
-  int todo=random(4);
-  if(todo==0){
-    random_run();  
+  int todo = random(9);
+  if (todo == 0 || todo == 6) {
+    random_run();
   }
-  if(todo==1){
-    random_head_check(1);  
+  if (todo == 1 || todo == 8) {
+    random_head_check(1);
   }
-  if(todo==2){
-    random_walk();  
+  if (todo == 2 || todo == 7) {
+    random_walk();
   }
-  if(todo==3){
-    prone();  
+  if (todo == 3) {
+    prone();
+  }
+  if (todo == 4) {
+    poof();
+  }
+  if (todo == 5) {
+    stand();
   }
 }
 
-void loop(){
+void loop() {
   test_loop();
 }
